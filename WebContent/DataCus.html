@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Data Customize</title>
+	
+<link rel="stylesheet" href="./css/DataCus.css" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="./js/multiselect/multiselectSrc/jquery.multiselect.css" />
+<link rel="stylesheet" type="text/css" href="./js/multiselect/assets/style.css" />
+<link rel="stylesheet" type="text/css" href="./js/multiselect/assets/prettify.css" />
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+
+<script type="text/javascript" src="./js/multiselect/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="./js/multiselect/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="./js/multiselect/assets/prettify.js"></script>
+<script type="text/javascript" src="./js/multiselect/multiselectSrc/jquery.multiselect.js"></script>
+<script type="text/javascript">
+
+</script>
+</head>
+<body id="dc">
+
+<div id="container">
+  <div id="header">
+    <h1>Data Model Customize</h1>
+  </div>
+  <div id="BasicSpec"></div>
+  <div id="toolbox">
+    <div id="op",class="opc">Object Property</div>
+  </div>	
+  <div id="content"></div>
+  <div id="properties"></div>
+  <div id="footer"></div>
+  
+</div>
+</body>
+<script type="text/javascript">
+
+window.onload=function()
+{
+  //showClass();
+  //global variable
+   cpaper=Raphael("content");
+  var color = Raphael.getColor();
+  var paper=Raphael("toolbox");
+  //global variable
+      st=cpaper.set();
+  var tr=paper.rect(40,80,100,60);
+  var tp=paper.circle(84,200,50);
+  var te=paper.ellipse(84,300,80,40);
+  $("#op").offset({ top: 370, left: 84-40-4 });
+  tr.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
+  te.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
+  tr.click(recl);
+  te.click(elcl);
+  function elcl()
+  {
+	  
+	    var el=cpaper.ellipse(Math.random()*1153,Math.random()*500, 60,40);
+      el.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
+      //alert(dragfun.move);
+      el.drag(moveEl,draggerEl,up);
+      el.dblclick(doubleClick);
+	    st.push(el);
+	  
+	}
+	function recl()
+	{
+	  
+	    var re=cpaper.rect(Math.random()*1400, Math.random()*900,70,45);
+	    re.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
+      re.drag(moveRe,draggerRe,up);
+      st.push(re);
+	}
+  //paper.setStart();
+  //paper.circle(10, 10, 5),
+  //paper.circle(30, 10, 5)
+  //var st = paper.setFinish();
+  //st.attr({fill: "red"}); // 改变两个圆的填充
+  //alert(st[0]);
+  
+  $(function(){
+    $("select").multiselect({
+        noneSelectedText: "select Parent Class",
+        checkAllText: "全选",
+        uncheckAllText: '全不选',
+        selectedList:4
+    });
+    
+});
+$( "#button" )
+      .click(function( ) {
+        var array_of_checked_values = $("select").multiselect("getChecked").map(function(){
+            return this.value; 
+        }).get();
+        alert(array_of_checked_values);
+        var appoption = "<option value='DATA'>DATA</option>";
+    //$('#select1,#select2').append(appoption);
+    $('#sela').append(appoption);
+    $("select").multiselect("refresh");
+      });
+
+};
+
+</script>
+<script type="text/javascript" src="./js/raphael.js"></script>
+
+<script type="text/javascript" src="./js/DataCus.js"></script>
+</html>

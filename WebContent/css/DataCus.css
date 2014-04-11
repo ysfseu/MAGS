@@ -1,0 +1,23 @@
+	body
+	{
+		margin: 0;
+		padding: 0;
+		background: #ddd;
+	}
+	#container {margin: 1em auto;width: 1300px; background: #fff;}
+	#header {background-color:#99bbbb;height: 45px;width: 100%;}
+	#toolbox {background-color:#C0D9D0; width:180px; height:550px;float:left;}
+	#content {background-color:#EEEEEE; width:750px; margin: 0 0 0 20px; float:left;}
+	#BasicSpec {background-color:#99afdd;width:180px;}
+	#footer
+{
+	clear: both;
+	color: #000;
+	text-align: right;
+	padding: 5px;
+	font-size: 90%;
+	border-top: 1px solid #999;
+	margin-top: 2em;
+}
+	
+	#common_box{width:220px;height:500px;position:absolute;right:0.2%;top:15%;border:3px solid #789;background:#fff;z-index:88;display:inline; overflow: hidden;}

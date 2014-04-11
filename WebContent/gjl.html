@@ -1,0 +1,274 @@
+   <!DOCTYPE html>
+   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>网页右侧弹出固定伸缩框</title>
+    <style type="text/css">#common_box{width:150px;height:500px;position:fixed;_position:absolute;right:0.2%;top:5%;border:3px solid #789;background:#fff;z-index:88}
+    #tool{width:110px;height:240px;position:fixed;_position:absolute;left:0.2%;top:15%;border:5px solid #789;background:#fff;z-index:88}
+
+    </style>
+    <script type="text/javascript" src="js/raphael.js"></script>
+    <script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+    <script type="text/javascript">
+
+
+           //随着节点位置的改变动态改变箭头
+           Raphael.fn.drawArr = function (obj) {
+            var point = getStartEnd(obj.obj1, obj.obj2);
+            var path1 = getArr(point.start.x, point.start.y, point.end.x, point.end.y, 8) ;
+
+            if (obj.arrPath){
+              obj.arrPath.attr({ path: path1 });
+            } else {
+              obj.arrPath = this.path(path1);
+            }
+            return obj;
+          };
+          function getStartEnd(obj1, obj2) {
+            var bb1 = obj1.getBBox(),
+            bb2 = obj2.getBBox();
+            var p = [
+            { x: bb1.x + bb1.width / 2, y: bb1.y - 1 },
+            { x: bb1.x + bb1.width / 2, y: bb1.y + bb1.height + 1 },
+            { x: bb1.x - 1, y: bb1.y + bb1.height / 2 },
+            { x: bb1.x + bb1.width + 1, y: bb1.y + bb1.height / 2 },
+            { x: bb2.x + bb2.width / 2, y: bb2.y - 1 },
+            { x: bb2.x + bb2.width / 2, y: bb2.y + bb2.height + 1 },
+            { x: bb2.x - 1, y: bb2.y + bb2.height / 2 },
+            { x: bb2.x + bb2.width + 1, y: bb2.y + bb2.height / 2 }
+            ];
+            var d = {}, dis = [];
+            for (var i = 0; i < 4; i++) {
+              for (var j = 4; j < 8; j++) {
+                var dx = Math.abs(p[i].x - p[j].x),
+                dy = Math.abs(p[i].y - p[j].y);
+                if (
+                 (i == j - 4) ||
+                 (((i != 3 && j != 6) || p[i].x < p[j].x) &&
+                   ((i != 2 && j != 7) || p[i].x > p[j].x) &&
+                   ((i != 0 && j != 5) || p[i].y > p[j].y) &&
+                   ((i != 1 && j != 4) || p[i].y < p[j].y))
+                 ) {
+                  dis.push(dx + dy);
+                d[dis[dis.length - 1]] = [i, j];
+              }
+            }
+          }
+          if (dis.length == 0) {
+            var res = [0, 4];
+          } else {
+            res = d[Math.min.apply(Math, dis)];
+          }
+          var result = {};
+          result.start = {};
+          result.end = {};
+          result.start.x = p[res[0]].x;
+          result.start.y = p[res[0]].y;
+          result.end.x = p[res[1]].x;
+          result.end.y = p[res[1]].y;
+          return result;
+        }
+          //获取组成箭头的三条线段的路径
+          function getArr(x1, y1, x2, y2, size) {
+              var angle = Raphael.angle(x1, y1, x2, y2);//得到两点之间的角度
+              var a45 = Raphael.rad(angle - 45);//角度转换成弧度
+              var a45m = Raphael.rad(angle + 45);
+              var x2a = x2 + Math.cos(a45) * size;
+              var y2a = y2 + Math.sin(a45) * size;
+              var x2b = x2 + Math.cos(a45m) * size;
+              var y2b = y2 + Math.sin(a45m) * size;
+              var result = ["M", x1, y1, "L", x2, y2, "L", x2a, y2a, "M", x2, y2, "L", x2b, y2b];
+              return result;
+            }
+            //点击创建属性按钮
+          var createProverty=function()
+          {  
+                  var name = prompt("请输入属性名：", ""); //将输入的内容赋给变量 name ，  
+                  //这里需要注意的是，prompt有两个参数，前面是提示的话，后面是当对话框出来后，在对话框里的默认值  
+                  if (name)//如果返回的有内容  
+                  {  
+                      $("#NameID").after($("<div></div>").text(name));
+                  }  
+  
+          }
+          var SaveClass=function(){
+            var children=$("#common_box").children("div");
+            var i=0;
+            var str=$("#NameID").val();
+            alert(str);
+            while(children[i]){
+              str+="#"+children[i].innerHTML;
+              i++;
+            }
+            
+            $.get("saveData",{Properties:str},function(){;});
+            alert(str);
+            
+          }
+          window.onload = function() {
+            var indexOfRects=0;
+            var indexOfConns=0;
+            var connections=[];
+            var boolarrow=false;
+            var bool=false;
+            var rects=[];
+            var shapes=[];
+            
+            var combox = document.getElementById("common_box");
+            var r = Raphael("holder", 1400, 900  );
+            var tool=Raphael("tool");
+            var toolrect=tool.rect(20,40,70,45);  
+            var path=tool.path(getArr(20,100,90,180,8)).attr({"stroke-width":4});
+          
+            var paper = Raphael("holder", 1200, 1200);
+            paper.setStart();
+            paper.rect(450, 450, 100, 100);
+            paper.text(480, 500, "hello");
+            var st = paper.setFinish();
+            st.transform("t10").translate(150, 150);
+
+          
+            //拖动节点开始时的事件
+          var dragger = function () {
+            this.ox = this.attr("x");
+            this.oy = this.attr("y");
+            this.animate({ "fill-opacity": .2 }, 500);
+          };
+          //拖动事件
+          var move = function (dx, dy) {
+            var att = { x: this.ox + dx, y: this.oy + dy };
+            this.attr(att);
+           // $("#test" + this.id).offset({ top: this.oy + dy + 10, left: this.ox + dx + 10 });
+            for (var i = connections.length-1; i>=0;i--) {
+              r.drawArr(connections[i]);
+            }
+          };
+        //拖动结束后的事件
+        var up = function () {
+          this.animate({ "fill-opacity": 0 }, 500);
+        };
+
+          path.click(function(){
+            
+            for (var i = 0; i < rects.length; i++) {
+                //alert(rects.length)
+                rects[i].attr({"fill-opacity": 0, "stroke-width": 2, cursor: "click" })
+            }
+            boolarrow=true;
+          
+          });
+          //var rect1=r.rect(190, 100, 60, 40, 4);
+          //var rect2=r.rect(290, 80, 60, 40, 4);
+          //connections.push(toolrect.drag(toolRectMove,toolRectDrag,toolRectup));
+
+          var color = Raphael.getColor();
+          toolrect.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" })
+          toolrect.click(function(){
+              var rect=r.rect(Math.random()*1400, Math.random()*900,70,45);
+              rect.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
+              //rect.drag(toolRectMove,toolRectDrag,toolRectup);
+              rect.drag(move,dragger,up);
+              rect.click(function(){
+                         // alert(0);
+                          
+                          if (boolarrow){
+                             // alert(0);
+                              if (bool) {
+                              //  alert(1);
+                              shapes.push(this);
+                              //alert(shapes.length);
+                              //this.drag(move,dragger,up);
+                              var path=r.drawArr({ obj1: shapes[0], obj2: shapes[1] });
+                              path.id=indexOfConns;
+                             // path.click(MouseOver);
+                              indexOfConns++;
+                              alert(path.id);
+                              connections.push(path);
+                              boolarrow=false;
+                              bool=false;
+                              shapes.length=0;
+                              }else{
+                                shapes.push(rect);
+                                //this.drag(move,dragger,up);
+                              //  alert(shapes.length);
+                                bool=true;
+                              }
+
+                          }
+                          else
+                          {
+                            return false
+                          }
+                    });
+              rects.push(toolrect.click());
+              return rect;
+          });
+
+          //var arrow=r.drawArr({ obj1: rect1 , obj2: rect2});
+          // var path=r.path(arrow.arrPath);
+
+          var flag = true, timer = null, initime = null, r_len = 0;
+         
+          
+
+        function MouseOver() {
+         clearTimeout(initime);
+         //根据状态flag执开展开收缩
+         if (flag) {
+
+                timer = setInterval(slideright, 10);
+              } else {
+
+                timer = setInterval(slideleft, 10);
+              }
+         }
+         //展开
+         function slideright() {
+           if (r_len <= -270) {
+            clearInterval(timer);
+            flag = !flag;
+            return false;
+          } else {
+            r_len -= 5;
+            combox.style.right = r_len + 'px';
+          }
+
+        }
+
+        //收缩
+        function slideleft() {
+
+             if (r_len >= 0) {
+              clearInterval(timer);
+              flag = !flag;
+              return false;
+            } else {
+              r_len += 5;
+              combox.style.right = r_len + 'px';
+            }
+       }
+
+    //加载后3秒页面自动收缩
+   	//initime = setTimeout("Arrowclick()", 3000);
+   //	path.dblclick(Arrowclick);
+ }
+  </script>
+  </head>
+
+  <body>
+    <div id="holder"></div>
+    <div id="common_box">
+      Name:<input type="text" name="Name" id="NameID" size=10/>
+      <button id="addProperty" onclick="createProverty()">添加属性</button>
+      <br/>
+      <button id="deleteProperty">删除属性</button>
+      <br/>
+      <button id="Save" onclick="SaveClass()">保存</button>
+      <button id="deleleClass">删除类</button>
+    </div>
+    <div id="tool">
+    </div>
+
+  </body>
+  </html>
