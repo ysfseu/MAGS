@@ -4,20 +4,68 @@
 		padding: 0;
 		background: #ddd;
 	}
-	#container {margin: 1em auto;width: 1300px; background: #fff;}
-	#header {background-color:#99bbbb;height: 45px;width: 100%;}
-	#toolbox {background-color:#C0D9D0; width:180px; height:550px;float:left;}
-	#content {background-color:#EEEEEE; width:750px; margin: 0 0 0 20px; float:left;}
-	#BasicSpec {background-color:#99afdd;width:180px;}
+	#container {
+	margin: 1em auto;
+	background: #fff;
+	height: 615px;
+	width: 1300px;
+	margin-right: 5px;
+	margin-left: 5px;
+}
+	#header {
+	background-color:#99bbbb;
+	height: 36px;
+	width: 100%;
+	margin-bottom: 8px;
+	margin-left: 5px;
+	margin-top: 2px;
+	margin-right: 10px;
+}
+	#toolbox {
+	background-color:#CACECD;
+	width:12%;
+	height:550px;
+	border: thin solid #666666;
+	color: #333333;
+	float: left;
+	margin-left: 10px;
+}
+	#content {
+	background-color:#EEEEEE;
+	width:73%;
+	height: 550px;
+	border: thin solid #696969;
+	float:left;
+	margin-left: 5px;
+}
+	#BasicSpec {
+	background-color:#FFFFFF;
+	width:12%;
+	height: 550px;
+	border: thin solid #CCCCCC;
+	float:left;
+	margin-left: 5px;
+}
 	#footer
 {
 	clear: both;
 	color: #000;
-	text-align: right;
+	text-align: center;
 	padding: 5px;
 	font-size: 90%;
 	border-top: 1px solid #999;
-	margin-top: 2em;
+	margin-top: 8px;
 }
 	
-	#common_box{width:220px;height:500px;position:absolute;right:0.2%;top:15%;border:3px solid #789;background:#fff;z-index:88;display:inline; overflow: hidden;}
+	#properties{
+		width:180px;
+		height:500px;
+		position:absolute;
+		right:61px;
+		top:80px;
+		border:3px solid #789;
+		background:#fff;
+		z-index:88;
+		display:none; 
+		overflow: hidden;
+	}

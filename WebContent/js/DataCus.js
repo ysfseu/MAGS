@@ -15,9 +15,19 @@ Raphael.fn.drawArr = function (obj) {
 	}
 	return obj;
 };
-function getStartEndPoint()
-{
-	 this.getStartEnd=function(obj1, obj2) {
+//获取组成箭头的三条线段的路径
+function getArr(x1, y1, x2, y2, size) {
+              var angle = Raphael.angle(x1, y1, x2, y2);//得到两点之间的角度
+              var a45 = Raphael.rad(angle - 45);//角度转换成弧度
+              var a45m = Raphael.rad(angle + 45);
+              var x2a = x2 + Math.cos(a45) * size;
+              var y2a = y2 + Math.sin(a45) * size;
+              var x2b = x2 + Math.cos(a45m) * size;
+              var y2b = y2 + Math.sin(a45m) * size;
+              var result = ["M", x1, y1, "L", x2, y2, "L", x2a, y2a, "M", x2, y2, "L", x2b, y2b];
+              return result;
+            }
+function getStartEnd(obj1, obj2) {
             var bb1 = obj1.getBBox(),
             bb2 = obj2.getBBox();
             var p = [
@@ -60,9 +70,8 @@ function getStartEndPoint()
           result.end.x = p[res[1]].x;
           result.end.y = p[res[1]].y;
           return result;
-        };
+        }
 
-}
 
 	//拖动节点开始时的事件
 draggerRe = function () {
@@ -80,6 +89,8 @@ draggerEl=function(){
 moveRe = function (dx, dy) {
 		var att = { x: this.ox + dx, y: this.oy + dy };
 		this.attr(att);
+
+    cpaper.getById(this.data("text")).attr(att);
 	// $("#test" + this.id).offset({ top: this.oy + dy + 10, left: this.ox + dx + 10 });
   /*
 		for (var i = st.length-1; i>=0;i--) {
@@ -88,7 +99,10 @@ moveRe = function (dx, dy) {
 	};
 moveEl = function (dx, dy) {
     var att = { cx: this.ox + dx, cy: this.oy + dy };
+    var attText={x: this.ox + dx, y: this.oy + dy}
     this.attr(att);
+    //alert(cpaper.getById(this.data("text")).node.tagName);
+    cpaper.getById(this.data("text")).attr(attText);
   // $("#test" + this.id).offset({ top: this.oy + dy + 10, left: this.ox + dx + 10 });
   /*
     for (var i = st.length-1; i>=0;i--) {
@@ -100,7 +114,56 @@ up = function () {
 		this.animate({ "fill-opacity": 0 }, 500);
 	};
 
-
+function showObjPro()
+{
+  xmlHttp=GetXmlHttpObject();
+  if (xmlHttp==null)
+  {
+    alert ("Your Browser Don't support AJAX");
+    return;
+  }
+  var url="getObjectProperty?";
+  //url=url+"?q="+str;
+  url=url+"sid="+Math.random();
+  xmlHttp.onreadystatechange=loadObjPro;
+  xmlHttp.open("GET",url,true);
+  xmlHttp.send(null);
+}
+var loadObjPro=function()
+{
+  if (xmlHttp.readyState==4)
+  { 
+    var ObjProArr=xmlHttp.responseText.split("#");
+    for (var i = 0; i < ObjProArr.length; i++) {
+     document.getElementById("rdfclass").appendChild(createLi(ObjProArr[i]));
+    };
+  }
+};
+function showDtPro()
+{
+  xmlHttp=GetXmlHttpObject();
+  if (xmlHttp==null)
+  {
+    alert ("Your Browser Don't support AJAX");
+    return;
+  }
+  var url="getDatatypeProperty?";
+  //url=url+"?q="+str;
+  url=url+"sid="+Math.random();
+  xmlHttp.onreadystatechange=loadDtPro;
+  xmlHttp.open("GET",url,true);
+  xmlHttp.send(null);
+}
+var loadDtPro=function()
+{
+  if (xmlHttp.readyState==4)
+  { 
+    var DtProArr=xmlHttp.responseText.split("#");
+    for (var i = 0; i < DtProArr.length; i++) {
+      document.getElementById("rdfclass").appendChild(createLi(DtProArr[i]));
+    };
+  }
+};
 function showClass()
 {
 
@@ -116,10 +179,20 @@ function showClass()
   var url="getClass?";
   //url=url+"?q="+str;
   url=url+"sid="+Math.random();
-  xmlHttp.onreadystatechange=stateChanged;
+  xmlHttp.onreadystatechange=loadClass;
   xmlHttp.open("GET",url,true);
   xmlHttp.send(null);
 }
+var loadClass=function()
+{
+  if (xmlHttp.readyState==4)
+  { 
+    var classArr=xmlHttp.responseText.split("#");
+    for (var i = 0; i < classArr.length; i++) {
+      document.getElementById("rdfclass").appendChild(createLi(classArr[i]));
+    };
+  }
+};
 function GetXmlHttpObject()
 {
   var xmlHttp=null;
@@ -142,19 +215,8 @@ function GetXmlHttpObject()
     }
   return xmlHttp;
 }
-var stateChanged=function()
-{
-  if (xmlHttp.readyState==4)
-  { 
-    var classArr=xmlHttp.responseText.split("#");
-    for (var i = 0; i < classArr.length; i++) {
-      var elem=document.getElementById("BasicSpec");
-      elem.appendChild(document.createElement("br"));
-      elem.appendChild(createLabel("div",classArr[i],classArr[i],classArr[i]));
-    };
-  }
-};
-var createLabel = function(type,id, name, value) {
+
+var createLabel = function(type,id,value) {
     var label_var = document.createElement(type);
  
     var label_id = document.createAttribute("id");
@@ -163,53 +225,59 @@ var createLabel = function(type,id, name, value) {
     var label_text = document.createTextNode(value);
  
     label_var.setAttributeNode(label_id);
-    var label_css = document.createAttribute("class");
-    label_css.nodeValue = "select_css";
-    label_var.setAttributeNode(label_css);
+    //var label_css = document.createAttribute("class");
+    //label_css.nodeValue = "select_css";
+    l//abel_var.setAttributeNode(label_css);
     label_var.appendChild(label_text);
  
     return label_var;
 };
+var createLi=function(value){
+  var Label_Li=document.createElement("li");
+  var li_text= document.createTextNode(value);
+  Label_Li.appendChild(li_text);
+  
+}
 
 var flag = false, timer = null, r_len = 0;
-  function DB() {
+function doubleClick() {
          //clearTimeout(initime);
          //根据状态flag执开展开收缩
-         if (flag) {
+  if (flag) {
 
-                slideright();
-                flag=false;
-              } else {
+    document.getElementById("ClassName").value=this.data("Name");
+    //alert(this.data("Name"));
+    slideright();
+    flag=false;
+    } else {
+      document.getElementById("ClassName").value=this.data("Name");
+      slideleft();
+      flag=true;
+    }
+}
+function slideright() {
 
-                slideleft();
-                flag=true;
-              }
-  }
-  function slideright() {
-
-    document.getElementById("common_box").style.display="none";
+    document.getElementById("properties").style.display="none";
 }
 
 //收缩
 function slideleft() {
 
-     document.getElementById("common_box").style.display="block";
-     $("#common_box").css("z-index",101);
-     $("#common_box").css("background-color","#FFFFCC");
-     document.getElementById("common_box").style.visibility="visible";
+     document.getElementById("properties").style.display="block";
+    // $("#common_box").css("z-index",101);
+    // $("#common_box").css("background-color","#FFFFCC");
+     document.getElementById("properties").style.visibility="visible";
 
   }
-
-
-
-var doubleClick=function(){
+ 
+function DfName(){
   var msgw,msgh,bordercolor;
   msgw=400;//提示窗口的宽度
-  msgh=500;//提示窗口的高度
+  msgh=300;//提示窗口的高度
   titleheight=25 //提示窗口标题高度
   bordercolor="#336699";//提示窗口的边框颜色
   titlecolor="#99CCFF";//提示窗口的标题颜色
-var sWidth,sHeight;
+  var sWidth,sHeight;
   sWidth=document.body.offsetWidth;//浏览器工作区域内页面宽度
   sHeight=screen.height;//屏幕高度（垂直分辨率）
 //背景层（大小与窗口有效区域相同，即当弹出对话框时，背景显示为放射状透明灰色）
@@ -228,19 +296,12 @@ var sWidth,sHeight;
   bgObj.style.zIndex = "10000";
   document.body.appendChild(bgObj);
 
-  var Mselect=document.createElement("select");
-  Mselect.setAttribute("id","sela");
-  Mselect.setAttribute("multiple","multiple");
-  Mselect.setAttribute("size",5);
-  var op=document.createElement("option");
-  op.setAttribute("value","V1");
-  op.innerHTML="test";
   var msgObj=document.createElement("div")//创建一个div对象（提示框层）
   //定义div属性，即相当于
   //<div id="msgDiv" align="center" style="background-color:white; border:1px solid #336699; position:absolute; left:50%; top:50%; font:12px/1.6em Verdana,Geneva,Arial,Helvetica,sans-serif; margin-left:-225px; margin-top:npx; width:400px; height:100px; text-align:center; line-height:25px; z-index:100001;"></div>
   msgObj.setAttribute("id","msgDiv");
   msgObj.setAttribute("align","center");
-  //msgObj.style.background="#fff";
+  msgObj.style.background="white";
   msgObj.style.border="1px solid " + bordercolor;
   msgObj.style.position = "absolute";
   msgObj.style.left = "50%";
@@ -253,13 +314,87 @@ var sWidth,sHeight;
   msgObj.style.textAlign = "center";
   msgObj.style.lineHeight ="25px";
   msgObj.style.zIndex = "10001";
-  document.body.appendChild(msgObj);
-  //var p=document.createElement("p");
-  //msgObj.appendChild(p);
-  msgObj.appendChild(Mselect);
+  var form=document.createElement("form");
+  form.innerHTML="Class Name:"
+  form.setAttribute("id","defnam");
+  var text=document.createElement("input");
+  text.setAttribute("type","text");
+  text.setAttribute("id","nametext");
+  var buttonSubmit=document.createElement("input");
+  buttonSubmit.setAttribute("type","button");
+  buttonSubmit.setAttribute("value","Submit");
+  buttonSubmit.style.width="60px";
+  buttonSubmit.style.align="center";
+  buttonSubmit.style.marginLeft="250px";
+  buttonSubmit.style.marginBottom="10px";
+  buttonSubmit.style.background=bordercolor;
+  buttonSubmit.style.border="1px solid "+ bordercolor;
+  buttonSubmit.style.color="white";
+  //buttonSubmit.onclick=saveClass;
+
+  var button=document.createElement("input");//创建一个input对象（提示框按钮）
+  //定义input的属性，即相当于
+  //<input type="button" align="center" style="width:100px; align:center; margin-left:250px; margin-bottom:10px;" value="close">
+  button.setAttribute("type","button");
+  button.setAttribute("value","close");
+  button.style.width="60px";
+  button.style.align="center";
+  button.style.marginLeft="250px";
+  button.style.marginBottom="10px";
+  button.style.background=bordercolor;
+  button.style.border="1px solid "+ bordercolor;
+  button.style.color="white";
+  button.onclick=removeObj;
+    function removeObj(){//点击标题栏触发的事件
+      document.body.removeChild(bgObj);//删除背景层Div
+     // document.getElementById("msgDiv").removeChild(title);//删除提示框的标题栏
+      document.body.removeChild(msgObj);//删除提示框层
+    }
+  document.body.appendChild(msgObj);//在body内添加提示框div对象msgObj
+  document.getElementById("msgDiv").appendChild(form);
+  document.getElementById("defnam").appendChild(text);
+  document.getElementById("defnam").appendChild(button);//在提示框div中添加按钮对象button
+  document.getElementById("defnam").appendChild(buttonSubmit);
+  buttonSubmit.onclick=function(){
+  var textValue=document.getElementById("nametext").value
+  if (textValue!="") {
+    document.body.removeChild(bgObj);//删除背景层Div
+    document.getElementById("defnam").removeChild(button);
+    document.getElementById("defnam").removeChild(buttonSubmit);
+    //document.getElementById("msgObj").removeChild(buttonSubmit);
+   // document.getElementById("msgDiv").removeChild(title);//删除提示框的标题栏
+    document.body.removeChild(msgObj);//删除提示框层
+    var el=cpaper.ellipse(Math.random()*1153,Math.random()*500, 40,20);
+    el.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
+    //alert(dragfun.move);
+    el.drag(moveEl,draggerEl,up);
+    el.dblclick(doubleClick);
+    shapes.push(el);
+    //alert(el.getBBox().x);
+    text=cpaper.text(el.getBBox().x+20,el.getBBox().y+10,textValue);
+    el.data("text",text.id);
+    el.data("Name",textValue);
+   // alert(el.data("Name"));
+    //alert(textValue);
+    //elemSet.transform("r10").translate(100, 100);
+
+  }else{
+    alert("please input name");
+  }
+
+}
+  
   
 
-  $(function(){
+ /* var Mselect=document.createElement("select");
+  Mselect.setAttribute("id","sela");
+  Mselect.setAttribute("multiple","multiple");
+  Mselect.setAttribute("size",5);
+  var op=document.createElement("option");
+  op.setAttribute("value","V1");
+  op.innerHTML="test";
+document.getElementById("msgDiv").appendChild(Mselect);
+ $(function(){
     $("select").multiselect({
         noneSelectedText: "==请选择==",
         checkAllText: "全选",
@@ -270,6 +405,6 @@ var sWidth,sHeight;
   var appoption = "<option value='DATA'>DATA</option>";
     //$('#select1,#select2').append(appoption);
     $('#sela').append(appoption);
-    $("select").multiselect("refresh");
+    $("select").multiselect("refresh");*/
 
 }

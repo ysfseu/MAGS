@@ -20,19 +20,98 @@
 </script>
 </head>
 <body id="dc">
-
-<div id="container">
+<div class="ui-datepicker-header" id="container">
   <div id="header">
-    <h1>Data Model Customize</h1>
+    <h1>  Data Model Customize</h1>
   </div>
-  <div id="BasicSpec"></div>
+  <div id="BasicSpec">
+  	<h4>Class</h4>
+		<ul id="rdfclass"type="dclass">
+ 			<li>苹果</li>
+ 			<li>香蕉</li>
+ 			<li>柠檬</li>
+ 			<li>桔子</li>
+		</ul>  
+	<h4>Object Property</h4>
+	<ul id="rdfobjpro"type="dobjpro">
+ 		<li>苹果</li>
+ 		<li>香蕉</li>
+ 		<li>柠檬</li>
+ 		<li>桔子</li>
+	</ul>  
+<h4>Datatype Property</h4>
+	<ul id="rdfdtpro"type="dtpro">
+ 		<li>苹果</li>
+ 		<li>香蕉</li>
+ 		<li>柠檬</li>
+ 		<li>桔子</li>
+	</ul>  
+  </div>
   <div id="toolbox">
-    <div id="op",class="opc">Object Property</div>
-  </div>	
+    <!--div id="op">Object Property</div-->
+  </div>
   <div id="content"></div>
-  <div id="properties"></div>
-  <div id="footer"></div>
-  
+  <div id="properties">
+    </br>
+  	<form><font face="verdana",size="8">Class or Property Name:</font>
+      </br>
+		<input id="ClassName" type="text" name="name"></input>
+    
+	</form>
+  <p>
+        <select id ="sClass" title="Basic example" multiple="multiple" name="example-basic" size="3" style="width:160px">
+        <option value="V1" onclick="function(){alert(1);}">Option 1</option>
+        <option value="V2">Option 2</option>
+        <option value="V3">Option 3</option>
+        <option value="option4">Option 4</option>
+        <option value="option5">Option 5</option>
+        <option value="option6">Option 6</option>
+        <option value="option7">Option 7</option>
+        <option value="option8">Option 8</option>
+        <option value="option9">Option 9</option>
+        <option value="option10">Option 10</option>
+        <option value="option11">Option 11</option>
+        <option value="option12">Option 12</option>
+        </select>
+    </p>
+    <p>
+        <select id ="sDomain" title="Basic example" multiple="multiple" name="example-basic" size="3" style="width:160px">
+        <option value="V1">Option 1</option>
+        <option value="V2">Option 2</option>
+        <option value="V3">Option 3</option>
+        <option value="option4">Option 4</option>
+        <option value="option5">Option 5</option>
+        <option value="option6">Option 6</option>
+        <option value="option7">Option 7</option>
+        <option value="option8">Option 8</option>
+        <option value="option9">Option 9</option>
+        <option value="option10">Option 10</option>
+        <option value="option11">Option 11</option>
+        <option value="option12">Option 12</option>
+        </select>
+    </p>
+    <p>
+        <select id ="sRange" title="Basic example" multiple="multiple" name="example-basic" size="3" style="width:160px">
+        <option value="V1">Option 1</option>
+        <option value="V2">Option 2</option>
+        <option value="V3">Option 3</option>
+        <option value="option4">Option 4</option>
+        <option value="option5">Option 5</option>
+        <option value="option6">Option 6</option>
+        <option value="option7">Option 7</option>
+        <option value="option8">Option 8</option>
+        <option value="option9">Option 9</option>
+        <option value="option10">Option 10</option>
+        <option value="option11">Option 11</option>
+        <option value="option12">Option 12</option>
+        </select>
+    </p>
+    <button style="width:80px;height:26px">Save</button>
+    <button style="width:80px;height:26px">Delete</button>
+  </div>
+  <div id="footer">
+  Copyright © 东南大学软件学院   
+  </div>
 </div>
 </body>
 <script type="text/javascript">
@@ -42,13 +121,17 @@ window.onload=function()
   //showClass();
   //global variable
    cpaper=Raphael("content");
-  var color = Raphael.getColor();
-  var paper=Raphael("toolbox");
+   color = Raphael.getColor();
+  paper=Raphael("toolbox");
   //global variable
-      st=cpaper.set();
+  shapes=cpaper.set();
+  //texts=cpaper.set();
+
   var tr=paper.rect(40,80,100,60);
   var tp=paper.circle(84,200,50);
-  var te=paper.ellipse(84,300,80,40);
+  var te=paper.ellipse(84,300,70,35);
+  //alert(tr.node.nodeName);
+
   $("#op").offset({ top: 370, left: 84-40-4 });
   tr.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
   te.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
@@ -56,22 +139,24 @@ window.onload=function()
   te.click(elcl);
   function elcl()
   {
-	  
-	    var el=cpaper.ellipse(Math.random()*1153,Math.random()*500, 60,40);
-      el.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
-      //alert(dragfun.move);
-      el.drag(moveEl,draggerEl,up);
-      el.dblclick(doubleClick);
-	    st.push(el);
+	    DfName();
+	    
+      
+      if (shapes.length>2) {
+        cpaper.drawArr({ obj1: st[0], obj2: st[1] });
+      };
 	  
 	}
+ 
 	function recl()
 	{
 	  
 	    var re=cpaper.rect(Math.random()*1400, Math.random()*900,70,45);
 	    re.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
       re.drag(moveRe,draggerRe,up);
-      st.push(re);
+      shapes.push(re);
+
+      
 	}
   //paper.setStart();
   //paper.circle(10, 10, 5),
@@ -81,14 +166,42 @@ window.onload=function()
   //alert(st[0]);
   
   $(function(){
-    $("select").multiselect({
+    $("#sClass").multiselect({
         noneSelectedText: "select Parent Class",
         checkAllText: "全选",
         uncheckAllText: '全不选',
-        selectedList:4
+        selectedList:4,
+        minWidth:100
     });
     
 });
+$(function(){
+    $("#sDomain").multiselect({
+        noneSelectedText: "select Domains",
+        checkAllText: "全选",
+        uncheckAllText: '全不选',
+        selectedList:4,
+        minWidth:100
+    });
+    
+});
+$(function(){
+    $("#sRange").multiselect({
+        noneSelectedText: "select Ranges",
+        checkAllText: "全选",
+        uncheckAllText: '全不选',
+        selectedList:4,
+        minWidth:100
+    });
+});
+  $("#sClass").multiselect("widget").find(":checkbox[value='V1']").attr("checked","checked");
+  $("#sClass option[value='V1']").attr("selected", 1);
+  $("#sClass").multiselect("refresh");
+
+  $("#sClass").multiselect("widget").find(":checkbox[value='V1']").attr("checked","checked");
+  $("#sClass option[value='V2']").attr("selected", 1);
+  $("#sClass").multiselect("refresh");
+
 $( "#button" )
       .click(function( ) {
         var array_of_checked_values = $("select").multiselect("getChecked").map(function(){
