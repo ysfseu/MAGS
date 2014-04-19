@@ -25,4 +25,28 @@
     <servlet-name>getClass</servlet-name>
     <url-pattern>/getClass</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>getObjectProperty</servlet-name>
+    <servlet-class>servlets.GetObjectPropertyServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getObjectProperty</servlet-name>
+    <url-pattern>/getObjectProperty</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>getDataTypeProperty</servlet-name>
+    <servlet-class>servlets.GetDataTypePropertyServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getDataTypeProperty</servlet-name>
+    <url-pattern>/getDataTypeProperty</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>storeModel</servlet-name>
+    <servlet-class>servlets.StoreModelServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>storeModel</servlet-name>
+    <url-pattern>/storeModel</url-pattern>
+  </servlet-mapping>
 </web-app>

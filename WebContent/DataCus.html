@@ -25,27 +25,18 @@
     <h1>  Data Model Customize</h1>
   </div>
   <div id="BasicSpec">
-  	<h4>Class</h4>
-		<ul id="rdfclass"type="dclass">
- 			<li>苹果</li>
- 			<li>香蕉</li>
- 			<li>柠檬</li>
- 			<li>桔子</li>
-		</ul>  
-	<h4>Object Property</h4>
-	<ul id="rdfobjpro"type="dobjpro">
- 		<li>苹果</li>
- 		<li>香蕉</li>
- 		<li>柠檬</li>
- 		<li>桔子</li>
-	</ul>  
-<h4>Datatype Property</h4>
-	<ul id="rdfdtpro"type="dtpro">
- 		<li>苹果</li>
- 		<li>香蕉</li>
- 		<li>柠檬</li>
- 		<li>桔子</li>
-	</ul>  
+     <div id="class">
+  	   <h4>Class</h4>
+	     <ul id="rdfclass" type="dclass"></ul> 
+    </div> 
+    <div id="obj">
+	     <h4>Object Property</h4>
+	     <ul id="rdfobjpro" type="dobjpro"></ul>
+	  </div>  
+    <div id="dt">
+	     <h4>Datatype Property</h4>
+	     <ul id="rdfdtpro" type="dtpro"></ul>  
+    </div> 
   </div>
   <div id="toolbox">
     <!--div id="op">Object Property</div-->
@@ -60,7 +51,7 @@
 	</form>
   <p>
         <select id ="sClass" title="Basic example" multiple="multiple" name="example-basic" size="3" style="width:160px">
-        <option value="V1" onclick="function(){alert(1);}">Option 1</option>
+        <option value="V1" onClick="function(){alert(1);}">Option 1</option>
         <option value="V2">Option 2</option>
         <option value="V3">Option 3</option>
         <option value="option4">Option 4</option>
@@ -106,7 +97,7 @@
         <option value="option12">Option 12</option>
         </select>
     </p>
-    <button style="width:80px;height:26px">Save</button>
+    <button id="SaveClass"style="width:80px;height:26px">Save</button>
     <button style="width:80px;height:26px">Delete</button>
   </div>
   <div id="footer">
@@ -118,8 +109,18 @@
 
 window.onload=function()
 {
-  //showClass();
-  //global variable
+  //Show("getObjectProperty?",loadObjPro);
+  ///Show("getDataTypeProperty?",loadDtPro);
+  //Show("getClass?",loadClass);
+    //myFunction();
+   document.getElementById("SaveClass").onclick=function(){
+    var str="test";
+    $.post("storeModel",{fileName:str},function(){;});
+    alert(str);};
+
+   showClass();
+   showObjPro();
+   showDtPro();
    cpaper=Raphael("content");
    color = Raphael.getColor();
   paper=Raphael("toolbox");
@@ -202,7 +203,7 @@ $(function(){
   $("#sClass option[value='V2']").attr("selected", 1);
   $("#sClass").multiselect("refresh");
 
-$( "#button" )
+  $("#button" )
       .click(function( ) {
         var array_of_checked_values = $("select").multiselect("getChecked").map(function(){
             return this.value; 

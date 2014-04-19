@@ -1,0 +1,438 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY data "http://www.semanticweb.org/spark/data/0.1/" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.semanticweb.org/spark/data/0.1#"
+     xml:base="http://www.semanticweb.org/spark/data/0.1"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:data="http://www.semanticweb.org/spark/data/0.1/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/spark/data/0.1">
+        <owl:versionInfo>20140219</owl:versionInfo>
+        <owl:imports rdf:resource="http://www.semanticweb.org/spark/organization/0.1/"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/attachedTo -->
+
+    <owl:ObjectProperty rdf:about="&data;attachedTo">
+        <rdfs:domain rdf:resource="&data;Attachment"/>
+        <rdfs:range rdf:resource="&data;DataItem"/>
+        <owl:inverseOf rdf:resource="&data;hasAttachment"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/createdBy -->
+
+    <owl:ObjectProperty rdf:about="&data;createdBy">
+        <owl:inverseOf rdf:resource="&data;creates"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="&data;DataBundle"/>
+                    <rdf:Description rdf:about="&data;DataItem"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/Individual"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/Role"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/RoleSet"/>
+                    <rdf:Description rdf:about="http://xmlns.com/foaf/0.1/Organization"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:range>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/creates -->
+
+    <owl:ObjectProperty rdf:about="&data;creates">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/Individual"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/Role"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/RoleSet"/>
+                    <rdf:Description rdf:about="http://xmlns.com/foaf/0.1/Organization"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+        <rdfs:range>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="&data;DataBundle"/>
+                    <rdf:Description rdf:about="&data;DataItem"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:range>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/fedBy -->
+
+    <owl:ObjectProperty rdf:about="&data;fedBy">
+        <rdfs:range rdf:resource="&data;DataChannel"/>
+        <owl:inverseOf rdf:resource="&data;feeds"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="&data;DataBundle"/>
+                    <rdf:Description rdf:about="&data;DataItem"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/feeds -->
+
+    <owl:ObjectProperty rdf:about="&data;feeds">
+        <rdfs:domain rdf:resource="&data;DataChannel"/>
+        <rdfs:range>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="&data;DataBundle"/>
+                    <rdf:Description rdf:about="&data;DataItem"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:range>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/hasAttachment -->
+
+    <owl:ObjectProperty rdf:about="&data;hasAttachment">
+        <rdfs:range rdf:resource="&data;Attachment"/>
+        <rdfs:domain rdf:resource="&data;DataItem"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/hasDI -->
+
+    <owl:ObjectProperty rdf:about="&data;hasDI">
+        <rdfs:domain rdf:resource="&data;DataBundle"/>
+        <rdfs:range rdf:resource="&data;DataItem"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/hasSubDB -->
+
+    <owl:ObjectProperty rdf:about="&data;hasSubDB">
+        <rdfs:range rdf:resource="&data;DataBundle"/>
+        <rdfs:domain rdf:resource="&data;DataBundle"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/isInDB -->
+
+    <owl:ObjectProperty rdf:about="&data;isInDB">
+        <rdfs:range rdf:resource="&data;DataBundle"/>
+        <rdfs:domain rdf:resource="&data;DataItem"/>
+        <owl:inverseOf rdf:resource="&data;hasDI"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/isSubDBOf -->
+
+    <owl:ObjectProperty rdf:about="&data;isSubDBOf">
+        <rdfs:range rdf:resource="&data;DataBundle"/>
+        <rdfs:domain rdf:resource="&data;DataBundle"/>
+        <owl:inverseOf rdf:resource="&data;hasSubDB"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/providedBy -->
+
+    <owl:ObjectProperty rdf:about="&data;providedBy">
+        <rdfs:domain rdf:resource="&data;DataChannel"/>
+        <rdfs:range>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/Individual"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/Role"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/RoleSet"/>
+                    <rdf:Description rdf:about="http://xmlns.com/foaf/0.1/Organization"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:range>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/provides -->
+
+    <owl:ObjectProperty rdf:about="&data;provides">
+        <rdfs:range rdf:resource="&data;DataChannel"/>
+        <owl:inverseOf rdf:resource="&data;providedBy"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/Individual"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/Role"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/RoleSet"/>
+                    <rdf:Description rdf:about="http://xmlns.com/foaf/0.1/Organization"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/relatedTo -->
+
+    <owl:ObjectProperty rdf:about="&data;relatedTo">
+        <rdfs:range>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="&data;DataBundle"/>
+                    <rdf:Description rdf:about="&data;DataItem"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:range>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="&data;DataBundle"/>
+                    <rdf:Description rdf:about="&data;DataItem"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/subscribedBy -->
+
+    <owl:ObjectProperty rdf:about="&data;subscribedBy">
+        <rdfs:domain rdf:resource="&data;DataChannel"/>
+        <rdfs:range>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/Individual"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/Role"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/RoleSet"/>
+                    <rdf:Description rdf:about="http://xmlns.com/foaf/0.1/Organization"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:range>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/subscribes -->
+
+    <owl:ObjectProperty rdf:about="&data;subscribes">
+        <rdfs:range rdf:resource="&data;DataChannel"/>
+        <owl:inverseOf rdf:resource="&data;subscribedBy"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/Individual"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/Role"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/spark/organization/0.1/RoleSet"/>
+                    <rdf:Description rdf:about="http://xmlns.com/foaf/0.1/Organization"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/id -->
+
+    <owl:DatatypeProperty rdf:about="&data;id">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="&data;Attachment"/>
+                    <rdf:Description rdf:about="&data;DataBundle"/>
+                    <rdf:Description rdf:about="&data;DataChannel"/>
+                    <rdf:Description rdf:about="&data;DataItem"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/locator -->
+
+    <owl:DatatypeProperty rdf:about="&data;locator">
+        <rdfs:domain rdf:resource="&data;DataChannel"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/path -->
+
+    <owl:DatatypeProperty rdf:about="&data;path">
+        <rdfs:domain rdf:resource="&data;Attachment"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/titile -->
+
+    <owl:DatatypeProperty rdf:about="&data;titile">
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="&data;Attachment"/>
+                    <rdf:Description rdf:about="&data;DataBundle"/>
+                    <rdf:Description rdf:about="&data;DataChannel"/>
+                    <rdf:Description rdf:about="&data;DataItem"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/Attachment -->
+
+    <owl:Class rdf:about="&data;Attachment"/>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/DataBundle -->
+
+    <owl:Class rdf:about="&data;DataBundle"/>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/DataChannel -->
+
+    <owl:Class rdf:about="&data;DataChannel"/>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/DataItem -->
+
+    <owl:Class rdf:about="&data;DataItem"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/myTranslatoinTask -->
+
+    <owl:NamedIndividual rdf:about="&data;myTranslatoinTask">
+        <rdf:type rdf:resource="&data;DataBundle"/>
+        <data:hasDI rdf:resource="&data;translation1"/>
+        <data:hasDI rdf:resource="&data;translation2"/>
+        <data:createdBy rdf:resource="http://www.semanticweb.org/spark/organization/0.1/Xiang_Zhang"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/translation1 -->
+
+    <owl:NamedIndividual rdf:about="&data;translation1">
+        <rdf:type rdf:resource="&data;DataItem"/>
+        <data:titile rdf:datatype="&xsd;string">IBM Mainframe Specification English Version</data:titile>
+        <data:hasAttachment rdf:resource="&data;translationDoc1"/>
+        <data:createdBy rdf:resource="http://www.semanticweb.org/spark/organization/0.1/Xiang_Zhang"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/translation2 -->
+
+    <owl:NamedIndividual rdf:about="&data;translation2">
+        <rdf:type rdf:resource="&data;DataItem"/>
+        <data:titile rdf:datatype="&xsd;string">Pride and Prejudice</data:titile>
+        <data:hasAttachment rdf:resource="&data;translationDoc2"/>
+        <data:createdBy rdf:resource="http://www.semanticweb.org/spark/organization/0.1/Xiang_Zhang"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/translationDoc1 -->
+
+    <owl:NamedIndividual rdf:about="&data;translationDoc1">
+        <rdf:type rdf:resource="&data;Attachment"/>
+        <data:path rdf:datatype="&xsd;string">/usr/spark/document/1.doc</data:path>
+        <data:titile rdf:datatype="&xsd;string">1.doc</data:titile>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/spark/data/0.1/translationDoc2 -->
+
+    <owl:NamedIndividual rdf:about="&data;translationDoc2">
+        <rdf:type rdf:resource="&data;Attachment"/>
+        <data:path rdf:datatype="&xsd;string">/usr/spark/document/2.doc</data:path>
+        <data:titile rdf:datatype="&xsd;string">2.doc</data:titile>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+

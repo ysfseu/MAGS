@@ -3,7 +3,7 @@
  */
 
 
-//随着节点位置的改变动态改变箭头
+//闅忕潃鑺傜偣浣嶇疆鐨勬敼鍙樺姩鎬佹敼鍙樼澶�
 Raphael.fn.drawArr = function (obj) {
 	var point = getStartEnd(obj.obj1, obj.obj2);
 	var path1 = getArr(point.start.x, point.start.y, point.end.x, point.end.y, 8);
@@ -15,10 +15,10 @@ Raphael.fn.drawArr = function (obj) {
 	}
 	return obj;
 };
-//获取组成箭头的三条线段的路径
+//鑾峰彇缁勬垚绠ご鐨勪笁鏉＄嚎娈电殑璺緞
 function getArr(x1, y1, x2, y2, size) {
-              var angle = Raphael.angle(x1, y1, x2, y2);//得到两点之间的角度
-              var a45 = Raphael.rad(angle - 45);//角度转换成弧度
+              var angle = Raphael.angle(x1, y1, x2, y2);//寰楀埌涓ょ偣涔嬮棿鐨勮搴�
+              var a45 = Raphael.rad(angle - 45);//瑙掑害杞崲鎴愬姬搴�
               var a45m = Raphael.rad(angle + 45);
               var x2a = x2 + Math.cos(a45) * size;
               var y2a = y2 + Math.sin(a45) * size;
@@ -73,7 +73,7 @@ function getStartEnd(obj1, obj2) {
         }
 
 
-	//拖动节点开始时的事件
+	//鎷栧姩鑺傜偣寮�鏃剁殑浜嬩欢
 draggerRe = function () {
 		this.ox = this.attr("x");
 		this.oy = this.attr("y");
@@ -85,7 +85,7 @@ draggerEl=function(){
     this.animate({ "fill-opacity": .2 }, 500);
 
 }
-	//拖动事件
+	//鎷栧姩浜嬩欢
 moveRe = function (dx, dy) {
 		var att = { x: this.ox + dx, y: this.oy + dy };
 		this.attr(att);
@@ -109,14 +109,48 @@ moveEl = function (dx, dy) {
         r.drawArr(st[i]);
     }*/
   };
-	//拖动结束后的事件
+	//鎷栧姩缁撴潫鍚庣殑浜嬩欢
 up = function () {
 		this.animate({ "fill-opacity": 0 }, 500);
 	};
-
-function showObjPro()
+  /////////////////
+function Show(url,id)
 {
   xmlHttp=GetXmlHttpObject();
+  if (xmlHttp==null)
+  {
+    alert ("Your Browser Don't support AJAX");
+    return;
+  }
+  //var url="getObjectProperty?";
+  //url=url+"?q="+str;
+  url=url+"sid="+Math.random();
+  xmlHttp.onreadystatechange=function()
+  {
+    if (xmlHttp.readyState==4)
+    { 
+      var ObjProArr=xmlHttp.responseText.split("#");
+      alert(xmlHttp.responseText);
+      for (var i = 0; i < ObjProArr.length; i++) {
+        document.getElementById(id).appendChild(createLi(ObjProArr[i]));
+      }
+    }
+  };
+  xmlHttp.open("GET",url,true);
+  xmlHttp.send(null);
+
+}
+
+function myFunction()
+{
+  Show("getObjectProperty?",loadObjPro);
+  Show("getDataTypeProperty?",loadDtPro);
+  Show("getClass?",loadClass);
+}
+/////////////////////////////
+function showObjPro()
+{
+  var xmlHttp=GetXmlHttpObject();
   if (xmlHttp==null)
   {
     alert ("Your Browser Don't support AJAX");
@@ -125,51 +159,53 @@ function showObjPro()
   var url="getObjectProperty?";
   //url=url+"?q="+str;
   url=url+"sid="+Math.random();
-  xmlHttp.onreadystatechange=loadObjPro;
+  xmlHttp.onreadystatechange=function(){loadObjPro(xmlHttp);};
   xmlHttp.open("GET",url,true);
   xmlHttp.send(null);
 }
-var loadObjPro=function()
+function loadObjPro(xmlHttp)
 {
   if (xmlHttp.readyState==4)
   { 
     var ObjProArr=xmlHttp.responseText.split("#");
+    alert(xmlHttp.responseText);
     for (var i = 0; i < ObjProArr.length; i++) {
-     document.getElementById("rdfclass").appendChild(createLi(ObjProArr[i]));
-    };
+     document.getElementById("rdfobjpro").appendChild(createLi(ObjProArr[i]));
+    }
   }
 };
 function showDtPro()
 {
-  xmlHttp=GetXmlHttpObject();
+  var xmlHttp=GetXmlHttpObject();
   if (xmlHttp==null)
   {
     alert ("Your Browser Don't support AJAX");
     return;
   }
-  var url="getDatatypeProperty?";
+  var url="getDataTypeProperty?";
   //url=url+"?q="+str;
   url=url+"sid="+Math.random();
-  xmlHttp.onreadystatechange=loadDtPro;
+  xmlHttp.onreadystatechange=function(){loadDtPro(xmlHttp);};
   xmlHttp.open("GET",url,true);
   xmlHttp.send(null);
 }
-var loadDtPro=function()
+function loadDtPro(xmlHttp)
 {
   if (xmlHttp.readyState==4)
   { 
+    alert(xmlHttp.responseText);
     var DtProArr=xmlHttp.responseText.split("#");
     for (var i = 0; i < DtProArr.length; i++) {
-      document.getElementById("rdfclass").appendChild(createLi(DtProArr[i]));
+      document.getElementById("rdfdtpro").appendChild(createLi(DtProArr[i]));
     };
   }
 };
 function showClass()
 {
 
-
-  xmlHttp=GetXmlHttpObject();
-
+  
+  var xmlHttp=GetXmlHttpObject();
+ 
   if (xmlHttp==null)
   {
     alert ("Your Browser Don't support AJAX");
@@ -179,29 +215,34 @@ function showClass()
   var url="getClass?";
   //url=url+"?q="+str;
   url=url+"sid="+Math.random();
-  xmlHttp.onreadystatechange=loadClass;
+  xmlHttp.onreadystatechange=function(){loadClass(xmlHttp);};
   xmlHttp.open("GET",url,true);
   xmlHttp.send(null);
 }
-var loadClass=function()
+function loadClass(xmlHttp)
 {
   if (xmlHttp.readyState==4)
   { 
+    alert(xmlHttp.responseText);
     var classArr=xmlHttp.responseText.split("#");
     for (var i = 0; i < classArr.length; i++) {
-      document.getElementById("rdfclass").appendChild(createLi(classArr[i]));
+      if(classArr[i]!=null)
+      {
+        document.getElementById("rdfclass").appendChild(createLi(classArr[i]));
+      }
+      
     };
   }
 };
 function GetXmlHttpObject()
 {
-  var xmlHttp=null;
-  try
+    var xmlHttp=null;
+    try
     {
       // Firefox, Opera 8.0+, Safari
       xmlHttp=new XMLHttpRequest();
     }
-  catch (e)
+    catch (e)
     {
     // Internet Explorer
       try
@@ -213,7 +254,7 @@ function GetXmlHttpObject()
         xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
       }
     }
-  return xmlHttp;
+    return xmlHttp;
 }
 
 var createLabel = function(type,id,value) {
@@ -232,17 +273,18 @@ var createLabel = function(type,id,value) {
  
     return label_var;
 };
-var createLi=function(value){
+function createLi(value){
   var Label_Li=document.createElement("li");
   var li_text= document.createTextNode(value);
   Label_Li.appendChild(li_text);
+  return Label_Li;
   
 }
 
 var flag = false, timer = null, r_len = 0;
 function doubleClick() {
          //clearTimeout(initime);
-         //根据状态flag执开展开收缩
+         //鏍规嵁鐘舵�flag鎵у紑灞曞紑鏀剁缉
   if (flag) {
 
     document.getElementById("ClassName").value=this.data("Name");
@@ -260,7 +302,7 @@ function slideright() {
     document.getElementById("properties").style.display="none";
 }
 
-//收缩
+//鏀剁缉
 function slideleft() {
 
      document.getElementById("properties").style.display="block";
@@ -272,17 +314,17 @@ function slideleft() {
  
 function DfName(){
   var msgw,msgh,bordercolor;
-  msgw=400;//提示窗口的宽度
-  msgh=300;//提示窗口的高度
-  titleheight=25 //提示窗口标题高度
-  bordercolor="#336699";//提示窗口的边框颜色
-  titlecolor="#99CCFF";//提示窗口的标题颜色
+  msgw=400;//鎻愮ず绐楀彛鐨勫搴�
+  msgh=300;//鎻愮ず绐楀彛鐨勯珮搴�
+  titleheight=25 //鎻愮ず绐楀彛鏍囬楂樺害
+  bordercolor="#336699";//鎻愮ず绐楀彛鐨勮竟妗嗛鑹�
+  titlecolor="#99CCFF";//鎻愮ず绐楀彛鐨勬爣棰橀鑹�
   var sWidth,sHeight;
-  sWidth=document.body.offsetWidth;//浏览器工作区域内页面宽度
-  sHeight=screen.height;//屏幕高度（垂直分辨率）
-//背景层（大小与窗口有效区域相同，即当弹出对话框时，背景显示为放射状透明灰色）
-  var bgObj=document.createElement("div");//创建一个div对象（背景层）
-  //定义div属性，即相当于
+  sWidth=document.body.offsetWidth;//娴忚鍣ㄥ伐浣滃尯鍩熷唴椤甸潰瀹藉害
+  sHeight=screen.height;//灞忓箷楂樺害锛堝瀭鐩村垎杈ㄧ巼锛�
+//鑳屾櫙灞傦紙澶у皬涓庣獥鍙ｆ湁鏁堝尯鍩熺浉鍚岋紝鍗冲綋寮瑰嚭瀵硅瘽妗嗘椂锛岃儗鏅樉绀轰负鏀惧皠鐘堕�鏄庣伆鑹诧級
+  var bgObj=document.createElement("div");//鍒涘缓涓�釜div瀵硅薄锛堣儗鏅眰锛�
+  //瀹氫箟div灞炴�锛屽嵆鐩稿綋浜�
   //<div id="bgDiv" style="position:absolute; top:0; background-color:#777; filter:progid:DXImagesTransform.Microsoft.Alpha(style=3,opacity=25,finishOpacity=75); opacity:0.6; left:0; width:918px; height:768px; z-index:10000;"></div>
   bgObj.setAttribute('id','bgDiv');
   bgObj.style.position="absolute";
@@ -296,8 +338,8 @@ function DfName(){
   bgObj.style.zIndex = "10000";
   document.body.appendChild(bgObj);
 
-  var msgObj=document.createElement("div")//创建一个div对象（提示框层）
-  //定义div属性，即相当于
+  var msgObj=document.createElement("div")//鍒涘缓涓�釜div瀵硅薄锛堟彁绀烘灞傦級
+  //瀹氫箟div灞炴�锛屽嵆鐩稿綋浜�
   //<div id="msgDiv" align="center" style="background-color:white; border:1px solid #336699; position:absolute; left:50%; top:50%; font:12px/1.6em Verdana,Geneva,Arial,Helvetica,sans-serif; margin-left:-225px; margin-top:npx; width:400px; height:100px; text-align:center; line-height:25px; z-index:100001;"></div>
   msgObj.setAttribute("id","msgDiv");
   msgObj.setAttribute("align","center");
@@ -332,8 +374,8 @@ function DfName(){
   buttonSubmit.style.color="white";
   //buttonSubmit.onclick=saveClass;
 
-  var button=document.createElement("input");//创建一个input对象（提示框按钮）
-  //定义input的属性，即相当于
+  var button=document.createElement("input");//鍒涘缓涓�釜input瀵硅薄锛堟彁绀烘鎸夐挳锛�
+  //瀹氫箟input鐨勫睘鎬э紝鍗崇浉褰撲簬
   //<input type="button" align="center" style="width:100px; align:center; margin-left:250px; margin-bottom:10px;" value="close">
   button.setAttribute("type","button");
   button.setAttribute("value","close");
@@ -345,25 +387,25 @@ function DfName(){
   button.style.border="1px solid "+ bordercolor;
   button.style.color="white";
   button.onclick=removeObj;
-    function removeObj(){//点击标题栏触发的事件
-      document.body.removeChild(bgObj);//删除背景层Div
-     // document.getElementById("msgDiv").removeChild(title);//删除提示框的标题栏
-      document.body.removeChild(msgObj);//删除提示框层
+    function removeObj(){//鐐瑰嚮鏍囬鏍忚Е鍙戠殑浜嬩欢
+      document.body.removeChild(bgObj);//鍒犻櫎鑳屾櫙灞侱iv
+     // document.getElementById("msgDiv").removeChild(title);//鍒犻櫎鎻愮ず妗嗙殑鏍囬鏍�
+      document.body.removeChild(msgObj);//鍒犻櫎鎻愮ず妗嗗眰
     }
-  document.body.appendChild(msgObj);//在body内添加提示框div对象msgObj
+  document.body.appendChild(msgObj);//鍦╞ody鍐呮坊鍔犳彁绀烘div瀵硅薄msgObj
   document.getElementById("msgDiv").appendChild(form);
   document.getElementById("defnam").appendChild(text);
-  document.getElementById("defnam").appendChild(button);//在提示框div中添加按钮对象button
+  document.getElementById("defnam").appendChild(button);//鍦ㄦ彁绀烘div涓坊鍔犳寜閽璞utton
   document.getElementById("defnam").appendChild(buttonSubmit);
   buttonSubmit.onclick=function(){
   var textValue=document.getElementById("nametext").value
   if (textValue!="") {
-    document.body.removeChild(bgObj);//删除背景层Div
+    document.body.removeChild(bgObj);//鍒犻櫎鑳屾櫙灞侱iv
     document.getElementById("defnam").removeChild(button);
     document.getElementById("defnam").removeChild(buttonSubmit);
     //document.getElementById("msgObj").removeChild(buttonSubmit);
-   // document.getElementById("msgDiv").removeChild(title);//删除提示框的标题栏
-    document.body.removeChild(msgObj);//删除提示框层
+   // document.getElementById("msgDiv").removeChild(title);//鍒犻櫎鎻愮ず妗嗙殑鏍囬鏍�
+    document.body.removeChild(msgObj);//鍒犻櫎鎻愮ず妗嗗眰
     var el=cpaper.ellipse(Math.random()*1153,Math.random()*500, 40,20);
     el.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
     //alert(dragfun.move);
@@ -396,9 +438,9 @@ function DfName(){
 document.getElementById("msgDiv").appendChild(Mselect);
  $(function(){
     $("select").multiselect({
-        noneSelectedText: "==请选择==",
-        checkAllText: "全选",
-        uncheckAllText: '全不选',
+        noneSelectedText: "==璇烽�鎷�=",
+        checkAllText: "鍏ㄩ�",
+        uncheckAllText: '鍏ㄤ笉閫�,
         selectedList:10
     });
 });
@@ -408,3 +450,18 @@ document.getElementById("msgDiv").appendChild(Mselect);
     $("select").multiselect("refresh");*/
 
 }
+var storeModel=function(){
+  /*
+    var children=$("#common_box").children("div");
+    var i=0;
+    var str=$("#NameID").val();
+    alert(str);
+    while(children[i]){
+      str+="#"+children[i].innerHTML;
+      i++;
+    }*/
+    var str="test";
+    $.post("storeModel",{fileName:str},function(){;});
+    alert(str);
+}
+
