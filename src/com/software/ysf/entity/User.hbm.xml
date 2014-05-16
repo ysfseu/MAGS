@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping>
+    <class name="com.software.ysf.entity.User" table="TBL_USER">
+        <id name="uid" type="java.lang.Integer">
+            <column name="uid" precision="11" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="username" type="java.lang.String">
+            <column name="USERNAME" length="20" not-null="true" />
+        </property>
+        <property name="password" type="java.lang.String">
+            <column name="PASSWORD" length="20" not-null="true" />
+        </property>
+        <property name="authority" type="java.lang.Integer">
+            <column name="AUTHORITY" precision="11" scale="0" not-null="true" />
+        </property>
+        <set name="projects" inverse="true" cascade="all" lazy="true">        
+        	<key column="pid" not-null="true"/>  
+        	<one-to-many class="com.software.ysf.entity.Project"/>  
+    	</set>   
+          
+    </class>
+</hibernate-mapping>

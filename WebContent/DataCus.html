@@ -20,11 +20,14 @@
 </script>
 </head>
 <body id="dc">
+
 <div class="ui-datepicker-header" id="container">
   <div id="header">
-    <h1>  Data Model Customize</h1>
+    <h1>Data Model Customize</h1>
   </div>
+
   <div id="BasicSpec">
+    <button id="stmodel" class="gwt-Button button-style">Submit Model</button>
      <div id="class">
   	   <h4>Class</h4>
 	     <ul id="rdfclass" type="dclass"></ul> 
@@ -47,59 +50,60 @@
   	<form><font face="verdana",size="8">Class or Property Name:</font>
       </br>
 		<input id="ClassName" type="text" name="name"></input>
-    
-	</form>
-  <p>
+    </form>
+    <p>
         <select id ="sClass" title="Basic example" multiple="multiple" name="example-basic" size="3" style="width:160px">
-        <option value="V1" onClick="function(){alert(1);}">Option 1</option>
-        <option value="V2">Option 2</option>
-        <option value="V3">Option 3</option>
-        <option value="option4">Option 4</option>
-        <option value="option5">Option 5</option>
-        <option value="option6">Option 6</option>
-        <option value="option7">Option 7</option>
-        <option value="option8">Option 8</option>
-        <option value="option9">Option 9</option>
-        <option value="option10">Option 10</option>
-        <option value="option11">Option 11</option>
-        <option value="option12">Option 12</option>
-        </select>
-    </p>
-    <p>
-        <select id ="sDomain" title="Basic example" multiple="multiple" name="example-basic" size="3" style="width:160px">
-        <option value="V1">Option 1</option>
-        <option value="V2">Option 2</option>
-        <option value="V3">Option 3</option>
-        <option value="option4">Option 4</option>
-        <option value="option5">Option 5</option>
-        <option value="option6">Option 6</option>
-        <option value="option7">Option 7</option>
-        <option value="option8">Option 8</option>
-        <option value="option9">Option 9</option>
-        <option value="option10">Option 10</option>
-        <option value="option11">Option 11</option>
-        <option value="option12">Option 12</option>
-        </select>
-    </p>
-    <p>
-        <select id ="sRange" title="Basic example" multiple="multiple" name="example-basic" size="3" style="width:160px">
-        <option value="V1">Option 1</option>
-        <option value="V2">Option 2</option>
-        <option value="V3">Option 3</option>
-        <option value="option4">Option 4</option>
-        <option value="option5">Option 5</option>
-        <option value="option6">Option 6</option>
-        <option value="option7">Option 7</option>
-        <option value="option8">Option 8</option>
-        <option value="option9">Option 9</option>
-        <option value="option10">Option 10</option>
-        <option value="option11">Option 11</option>
-        <option value="option12">Option 12</option>
         </select>
     </p>
     <button id="SaveClass"style="width:80px;height:26px">Save</button>
     <button style="width:80px;height:26px">Delete</button>
   </div>
+
+ <div id="ObjProperties">
+    </br>
+    <form><font face="verdana",size="8">Class or Property Name:</font>
+      </br>
+    <input id="ObjProName" type="text" name="name"></input>
+    </form>
+    <p>
+        <select id ="ObjPro" title="Basic example" multiple="multiple" name="example-basic" size="3" style="width:160px">
+        </select>
+    </p>
+    <p>
+        <select id ="sDomain" title="Basic example" multiple="multiple" name="example-basic" size="3" style="width:160px">
+        </select>
+    </p>
+    <p>
+        <select id ="sRange" title="Basic example" multiple="multiple" name="example-basic" size="3" style="width:160px">
+        <option value="option12">Option 12</option>
+        </select>
+    </p>
+    <button id="SaveObjPro"style="width:80px;height:26px">Save</button>
+    <button id="DeleteObjPro"style="width:80px;height:26px">Delete</button>
+  </div>
+
+  <div id="DtProperties">
+    </br>
+    <form><font face="verdana",size="8">Class or Property Name:</font>
+      </br>
+    <input id="DtProName" type="text" name="name"></input>
+    </form>
+    <p>
+        <select id ="dtDomain" title="Basic example" multiple="multiple" name="example-basic" size="3" style="width:160px">
+        </select>
+    </p>
+    <p>
+        <select id ="dtRange" title="Basic example" multiple="multiple" name="example-basic" size="3" style="width:160px">
+        <option value="option12">Option 12</option>
+        </select>
+    </p>
+    <button id="SaveDtPro"style="width:80px;height:26px">Save</button>
+    <button id="DeleteDtPro"style="width:80px;height:26px">Delete</button>
+  </div>
+
+
+   
+
   <div id="footer">
   Copyright © 东南大学软件学院   
   </div>
@@ -110,39 +114,72 @@
 window.onload=function()
 {
   //Show("getObjectProperty?",loadObjPro);
-  ///Show("getDataTypeProperty?",loadDtPro);
+  //Show("getDataTypeProperty?",loadDtPro);
   //Show("getClass?",loadClass);
     //myFunction();
+    //$.get("addDatatypePro");
+    //$("#aaa").click(function(){$.get("addObjectPro");});
+    
+     $('#ObjPro').on('change', function () {
+        var array_of_checked_values = this.multiselect("getChecked").map(function(){
+            return this.value; 
+        }).get();
+        var checked="";
+        for (var i = 0; i < array_of_checked_values.length; i++) {
+          checked=checked+array_of_checked_values[i]+"#";
+        };
+        $.get("getObjDomain",{superClassName:checked},function(data,textStatus){
+          alert(data);
+          if (textStatus=="success"&&data!="") {
+            var domainnames=data.split("#");
+            for (var i = 0; i < domainnames.length; i++) {
+              if(domainnames[i]!=text)
+              {
+                var appoption="<option value='"+domainnames[i]+"'>"+domainnames[i]+"</option>";
+                $('#sClass').append(appoption);
+                $("#sClass").multiselect("refresh");
+              }   
+            }  
+          }
+          else{
+            alert("Get Domains Failed");
+          }
+        });
+     })
+    /*
    document.getElementById("SaveClass").onclick=function(){
     var str="test";
     $.post("storeModel",{fileName:str},function(){;});
-    alert(str);};
+    alert(str);};*/
 
    showClass();
    showObjPro();
    showDtPro();
    cpaper=Raphael("content");
    color = Raphael.getColor();
-  paper=Raphael("toolbox");
+   paper=Raphael("toolbox");
   //global variable
-  shapes=cpaper.set();
+    shapes=cpaper.set();
   //texts=cpaper.set();
 
   var tr=paper.rect(40,80,100,60);
+  var trtext=paper.text(tr.getBBox().x+50,tr.getBBox().y+30,"Class");
   var tp=paper.circle(84,200,50);
+  var tptext=paper.text(tp.getBBox().x+50,tp.getBBox().y+50,"Datatype Property");
   var te=paper.ellipse(84,300,70,35);
+  var tetext=paper.text(te.getBBox().x+70,te.getBBox().y+35,"Object Property");
   //alert(tr.node.nodeName);
 
   $("#op").offset({ top: 370, left: 84-40-4 });
   tr.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
   te.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
+  tp.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
   tr.click(recl);
   te.click(elcl);
+  tp.click(crcl);
   function elcl()
   {
-	    DfName();
-	    
-      
+      DefineObjPro();
       if (shapes.length>2) {
         cpaper.drawArr({ obj1: st[0], obj2: st[1] });
       };
@@ -151,23 +188,37 @@ window.onload=function()
  
 	function recl()
 	{
-	  
-	    var re=cpaper.rect(Math.random()*1400, Math.random()*900,70,45);
-	    re.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
-      re.drag(moveRe,draggerRe,up);
-      shapes.push(re);
+	    
+      DefineClass();
+	   /// var re=cpaper.rect(Math.random()*1400, Math.random()*900,70,45);
+	   //  re.attr({ fill: color, stroke: color, "fill-opacity": 0, "stroke-width": 2, cursor: "move" });
+     ///   // re.drag(moveRe,draggerRe,up);
+  ////  shapes.push(re);
 
       
 	}
+  function crcl()
+  {
+      DefineDtPro();
+  }
   //paper.setStart();
   //paper.circle(10, 10, 5),
   //paper.circle(30, 10, 5)
   //var st = paper.setFinish();
   //st.attr({fill: "red"}); // 改变两个圆的填充
   //alert(st[0]);
-  
   $(function(){
     $("#sClass").multiselect({
+        noneSelectedText: "select Parent Class",
+        checkAllText: "全选",
+        uncheckAllText: '全不选',
+        selectedList:4,
+        minWidth:100
+    });
+    
+});
+  $(function(){
+    $("#ObjPro").multiselect({
         noneSelectedText: "select Parent Class",
         checkAllText: "全选",
         uncheckAllText: '全不选',
@@ -188,6 +239,25 @@ $(function(){
 });
 $(function(){
     $("#sRange").multiselect({
+        noneSelectedText: "select Ranges",
+        checkAllText: "全选",
+        uncheckAllText: '全不选',
+        selectedList:4,
+        minWidth:100
+    });
+});
+
+$(function(){
+    $("#dtDomain").multiselect({
+        noneSelectedText: "select Ranges",
+        checkAllText: "全选",
+        uncheckAllText: '全不选',
+        selectedList:4,
+        minWidth:100
+    });
+});
+$(function(){
+    $("#dtRange").multiselect({
         noneSelectedText: "select Ranges",
         checkAllText: "全选",
         uncheckAllText: '全不选',
